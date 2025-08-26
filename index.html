@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,11 +11,18 @@
     body {
       font-family: 'Inter', sans-serif;
       background: linear-gradient(to right, #f3f4f6, #e0e7ff);
-      margin: 0; padding: 20px;
+      margin: 0; 
+      padding: 20px;
       color: #1f2937;
     }
 
-    h1 { font-weight: 700; font-size: 2rem; margin-bottom: 0.5rem; text-align: center; color: #111827; }
+    h1 { 
+      font-weight: 700; 
+      font-size: 2rem; 
+      margin-bottom: 0.5rem; 
+      text-align: center; 
+      color: #111827; 
+    }
 
     .client-info {
       background: #ffffff;
@@ -50,11 +58,11 @@
     #search:focus { border-color: #3b82f6; box-shadow: 0 0 12px #3b82f6; }
 
     #app-list {
-      max-width: 600px;
+      max-width: 1200px; /* wider for desktops */
       margin: 0 auto;
       display: grid;
-      grid-template-columns: 1fr;
-      gap: 18px;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
     }
 
     .skeleton-card {
@@ -113,7 +121,18 @@
     .disclaimer { margin-top: 40px; text-align: center; font-size: 0.95rem; color: #6b7280; animation: fadeIn 2s ease-in-out; }
     @keyframes fadeIn { 0% {opacity: 0;} 100% {opacity: 1;} }
 
-    @media (min-width: 768px) { #app-list { grid-template-columns: 1fr 1fr; gap: 24px; } }
+    /* Extra styling for larger screens */
+    @media (min-width: 768px) {
+      body { padding: 30px; }
+      .client-info { padding: 30px 35px; font-size: 1.2rem; }
+    }
+    @media (min-width: 1024px) {
+      body { padding: 40px; }
+      .client-info { padding: 35px 40px; font-size: 1.25rem; }
+      .card { padding: 25px 30px; }
+      .task-title { font-size: 1.5rem; }
+      .info-row { font-size: 1rem; }
+    }
   </style>
 </head>
 <body>
@@ -132,7 +151,6 @@
   const CSV_URL = 'https://raw.githubusercontent.com/johandebeer21/Tracker-Demo/refs/heads/main/tracker4.csv';
   let applications = [];
 
-  // ✅ Parse CSV and ignore completely empty rows
   function parseCSV(text) {
     const lines = text.trim().split('\n').filter(line => line.trim() !== '');
     const headers = lines.shift().split(',').map(h => h.trim());
@@ -143,7 +161,7 @@
         headers.forEach((h,i) => obj[h] = data[i] || '');
         return obj;
       })
-      .filter(app => app['Task']); // only keep rows with a Task
+      .filter(app => app['Task']);
   }
 
   const appList = document.getElementById('app-list');
